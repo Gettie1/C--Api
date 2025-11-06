@@ -14,6 +14,13 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
+app.UseHttpsRedirection();
+app.UseAuthorization(); // ← ADD THIS LINE
+app.MapControllers(); // ← ADD THIS LINE for controller routing
+var summaries = new[]
+{
+    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+};
 // REMOVE OR COMMENT OUT this line to disable HTTPS redirection
 // app.UseHttpsRedirection();
 
