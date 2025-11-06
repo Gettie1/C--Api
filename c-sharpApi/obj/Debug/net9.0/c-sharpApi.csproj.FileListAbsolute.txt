@@ -30,3 +30,4 @@ C:\Users\user\Downloads\C-sharp Api\c-sharpApi\obj\Debug\net9.0\refint\c-sharpAp
 C:\Users\user\Downloads\C-sharp Api\c-sharpApi\obj\Debug\net9.0\c-sharpApi.pdb
 C:\Users\user\Downloads\C-sharp Api\c-sharpApi\obj\Debug\net9.0\c-sharpApi.genruntimeconfig.cache
 C:\Users\user\Downloads\C-sharp Api\c-sharpApi\obj\Debug\net9.0\ref\c-sharpApi.dll
+C:\Users\user\Downloads\C-sharp Api\c-sharpApi\obj\Debug\net9.0\c-sharpApi.sourcelink.json
