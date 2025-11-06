@@ -15,8 +15,6 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthorization(); // ← ADD THIS LINE
 app.MapControllers(); // ← ADD THIS LINE for controller routing
-
-// Keep the existing weather forecast endpoint (optional)
 var summaries = new[]
 {
     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
