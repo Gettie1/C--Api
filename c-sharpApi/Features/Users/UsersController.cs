@@ -1,67 +1,53 @@
 using c_sharpApi.Features.Users.DTOs;
+using c_sharpApi.Features.Users.Services;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace c_sharpApi.Features.Users
 {
-    // public class User
-    // {
-    //     public int Id { get; set; }
-    //     public string FirstName { get; set; } = string.Empty;
-    //     public string LastName { get; set; } = string.Empty;
-    //     public string Email { get; set; } = string.Empty;
-    // }
-
     [ApiController]
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
-         private readonly UserServices _userServices;
+        private readonly UserService _userService;
 
-        public UsersController(UserServices userServices)
+        public UsersController(UserService userService)
         {
-            _userServices = userServices;
+            _userService = userService;
         }
-        // private static List<User> _users = new()
-        // {
-        //     new User { Id = 1, FirstName = "John", LastName = "Doe", Email = "john@example.com" },
-        //     new User { Id = 2, FirstName = "Jane", LastName = "Smith", Email = "jane@example.com" }
-        // };
 
+        // GET: api/users
         [HttpGet]
-        public IActionResult GetUsers()
+        public async Task<IActionResult> GetUsers()
         {
-            return Ok(_userServices.GetAllUsers());
+            var users = await _userService.GetAllUsers();
+            return Ok(users);
         }
 
+        // GET: api/users/5
         [HttpGet("{id}")]
-        public IActionResult GetUser(int id)
+        public async Task<IActionResult> GetUser(int id)
         {
-            var user = _userServices.GetUserById(id);
+            var user = await _userService.GetUserById(id);
             if (user == null) return NotFound();
             return Ok(user);
         }
+
+        // POST: api/users
         [HttpPost]
-        public IActionResult CreateUser(CreateUserDto createUserDto)
+        public async Task<IActionResult> CreateUser(CreateUserDto createUserDto)
         {
-            if (string.IsNullOrEmpty(createUserDto.Username))
-            {
-                return BadRequest("Username is required.");
-            }
-            if (string.IsNullOrEmpty(createUserDto.Email))
-            {
-                return BadRequest("Email is required.");
-            }
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-            var existingUser = _userServices.GetAllUsers().FirstOrDefault(u => u.Email == createUserDto.Email);
-            if (existingUser != null)
+            try
             {
-                return Conflict("A user with this email already exists.");
+                var user = await _userService.CreateUser(createUserDto);
+                return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
             }
-
-            var newUser = _userServices.CreateUser(createUserDto);
-            return CreatedAtAction(nameof(GetUser), new { id = newUser.Id }, newUser);
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
     }
-}   
+}

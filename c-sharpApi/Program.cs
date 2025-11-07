@@ -1,10 +1,20 @@
-using c_sharpApi.Features.Users;
+using Microsoft.EntityFrameworkCore;
+using c_sharpApi.Data;
+using c_sharpApi.Features.Users.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
-builder.Services.AddScoped<UserServices>();
+// Register concrete UserService because IUserService is not defined.
+builder.Services.AddScoped<UserService>();
+
+// Add Database Context (SQLite)
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Register your services
 
 var app = builder.Build();
 
@@ -15,41 +25,14 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseAuthorization(); // ← ADD THIS LINE
-app.MapControllers(); // ← ADD THIS LINE for controller routing
-
-// REMOVE OR COMMENT OUT this line to disable HTTPS redirection
-// app.UseHttpsRedirection();
-
 app.UseAuthorization();
 app.MapControllers();
 
-// // Keep the existing weather forecast endpoint
-var summaries = new[]
+// Initialize database (creates database and tables if they don't exist)
+using (var scope = app.Services.CreateScope())
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
-
-// Add a simple test endpoint
-app.MapGet("/", () => "API is running!");
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    dbContext.Database.EnsureCreated(); // This creates the database and tables
+}
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

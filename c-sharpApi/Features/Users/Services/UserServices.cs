@@ -1,31 +1,36 @@
-using c_sharpApi.Features.Users.DTOs;
+using Microsoft.EntityFrameworkCore;
+using c_sharpApi.Data;
 using c_sharpApi.Features.Users.Entities;
-using EntitiesNs = c_sharpApi.Features.Users.Entities;
+using c_sharpApi.Features.Users.DTOs;
 using System.Security.Cryptography;
-using System.Linq;
+using System.Text;
 
-namespace c_sharpApi.Features.Users
+namespace c_sharpApi.Features.Users.Services
 {
-    public class UserServices
+    public class UserService
     {
-    private static List<EntitiesNs.User> _users = new()
+        private readonly ApplicationDbContext _context;
+
+        public UserService(ApplicationDbContext context)
         {
-            new EntitiesNs.User { Id = 1, Username = "john_doe", Email = "john@example.com", PasswordHash = "hashed_password_1" },
-            new EntitiesNs.User { Id = 2, Username = "jane_doe", Email = "jane@example.com", PasswordHash = "hashed_password_2" }
-        };
-        public List<UserResponseDto> GetAllUsers()
+            _context = context;
+        }
+
+        public async Task<List<UserResponseDto>> GetAllUsers()
         {
-            return _users.Select(u => new UserResponseDto
+            var users = await _context.Users.ToListAsync();
+            return users.Select(u => new UserResponseDto
             {
                 Id = u.Id,
                 Username = u.Username,
                 Email = u.Email,
+                CreatedAt = u.CreatedAt
             }).ToList();
         }
-        // get user by id
-        public UserResponseDto? GetUserById(int id)
+
+        public async Task<UserResponseDto?> GetUserById(int id)
         {
-            var user = _users.FirstOrDefault(u => u.Id == id);
+            var user = await _context.Users.FindAsync(id);
             if (user == null) return null;
 
             return new UserResponseDto
@@ -33,39 +38,48 @@ namespace c_sharpApi.Features.Users
                 Id = user.Id,
                 Username = user.Username,
                 Email = user.Email,
+                CreatedAt = user.CreatedAt
             };
         }
-        public UserResponseDto CreateUser(CreateUserDto createUserDto)
+
+        public async Task<UserResponseDto> CreateUser(CreateUserDto createUserDto)
         {
-            // Hash the password before storing it
+            // Check if user already exists
+            if (await _context.Users.AnyAsync(u => u.Username == createUserDto.Username))
+                throw new Exception("Username already exists");
+
+            if (await _context.Users.AnyAsync(u => u.Email == createUserDto.Email))
+                throw new Exception("Email already exists");
+
+            // Hash password
             var passwordHash = HashPassword(createUserDto.Password);
 
-            var user = new EntitiesNs.User
+            // Create user
+            var user = new User
             {
                 Username = createUserDto.Username,
                 Email = createUserDto.Email,
-                PasswordHash = passwordHash
+                PasswordHash = passwordHash,
+                CreatedAt = DateTime.UtcNow
             };
-            // Assign a new Id since this in-memory store doesn't auto-generate one.
-            // Use the current max Id + 1 (or 1 when list is empty).
-            var nextId = _users.Any() ? _users.Max(u => u.Id) + 1 : 1;
-            user.Id = nextId;
-            _users.Add(user);
-            // Here you would typically save the user to a database
-            // For this example, we'll just return a UserResponseDto
+
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
 
             return new UserResponseDto
             {
                 Id = user.Id,
                 Username = user.Username,
-                Email = user.Email,};
+                Email = user.Email,
+                CreatedAt = user.CreatedAt
+            };
         }
 
         private string HashPassword(string password)
         {
             using (var sha256 = SHA256.Create())
             {
-                var bytes = System.Text.Encoding.UTF8.GetBytes(password);
+                var bytes = Encoding.UTF8.GetBytes(password);
                 var hash = sha256.ComputeHash(bytes);
                 return Convert.ToBase64String(hash);
             }

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\user\\Downloads\\C-sharp Api\\c-sharpApi\\c-sharpApi.csproj": {}
+    "C:\\Users\\user\\Downloads\\C-sharp Api\\c-sharpApi\\c-sharpApi.csproj": {}
   },
   "projects": {
-    "c:\\Users\\user\\Downloads\\C-sharp Api\\c-sharpApi\\c-sharpApi.csproj": {
+    "C:\\Users\\user\\Downloads\\C-sharp Api\\c-sharpApi\\c-sharpApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\user\\Downloads\\C-sharp Api\\c-sharpApi\\c-sharpApi.csproj",
+        "projectUniqueName": "C:\\Users\\user\\Downloads\\C-sharp Api\\c-sharpApi\\c-sharpApi.csproj",
         "projectName": "c-sharpApi",
-        "projectPath": "c:\\Users\\user\\Downloads\\C-sharp Api\\c-sharpApi\\c-sharpApi.csproj",
+        "projectPath": "C:\\Users\\user\\Downloads\\C-sharp Api\\c-sharpApi\\c-sharpApi.csproj",
         "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\user\\Downloads\\C-sharp Api\\c-sharpApi\\obj\\",
+        "outputPath": "C:\\Users\\user\\Downloads\\C-sharp Api\\c-sharpApi\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -51,6 +51,22 @@
           "targetAlias": "net9.0",
           "dependencies": {
             "Microsoft.AspNetCore.OpenApi": {
+              "target": "Package",
+              "version": "[9.0.10, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[9.0.10, )"
+            },
+            "Microsoft.EntityFrameworkCore.Sqlite": {
+              "target": "Package",
+              "version": "[9.0.10, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
               "target": "Package",
               "version": "[9.0.10, )"
             }
