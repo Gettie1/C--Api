@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\user\\Downloads\\C-sharp Api\\c-sharpApi\\c-sharpApi.csproj": {}
+    "c:\\Users\\user\\Downloads\\C-sharp Api\\c-sharpApi\\c-sharpApi.csproj": {}
   },
   "projects": {
-    "C:\\Users\\user\\Downloads\\C-sharp Api\\c-sharpApi\\c-sharpApi.csproj": {
+    "c:\\Users\\user\\Downloads\\C-sharp Api\\c-sharpApi\\c-sharpApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\user\\Downloads\\C-sharp Api\\c-sharpApi\\c-sharpApi.csproj",
+        "projectUniqueName": "c:\\Users\\user\\Downloads\\C-sharp Api\\c-sharpApi\\c-sharpApi.csproj",
         "projectName": "c-sharpApi",
-        "projectPath": "C:\\Users\\user\\Downloads\\C-sharp Api\\c-sharpApi\\c-sharpApi.csproj",
+        "projectPath": "c:\\Users\\user\\Downloads\\C-sharp Api\\c-sharpApi\\c-sharpApi.csproj",
         "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\user\\Downloads\\C-sharp Api\\c-sharpApi\\obj\\",
+        "outputPath": "c:\\Users\\user\\Downloads\\C-sharp Api\\c-sharpApi\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

@@ -1,6 +1,61 @@
 @c_sharpApi_HostAddress = http://localhost:5067
+@id = 1
 
 GET {{c_sharpApi_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###
+GET {{c_sharpApi_HostAddress}}/weatherforecast/{{id}}
+Accept: application/json
+###
+POST {{c_sharpApi_HostAddress}}/weatherforecast/
+Accept: application/json
+Content-Type: application/json
+
+Body:
+{
+  "date": "2023-10-01",
+  "temperatureC": 25,
+  "summary": "Sunny"
+}
+###
+PUT {{c_sharpApi_HostAddress}}/weatherforecast/{{id}}
+Accept: application/json
+Content-Type: application/json
+
+Body:
+{
+  "date": "2023-10-01",
+  "temperatureC": 25,
+  "summary": "Sunny"
+}   
+###
+DELETE {{c_sharpApi_HostAddress}}/weatherforecast/{{id}}
+Accept: application/json
+### USERS API
+GET {{c_sharpApi_HostAddress}}/api/users/
+Accept: application/json
+
+###
+GET {{c_sharpApi_HostAddress}}/api/users/{{id}}
+Accept: application/json
+###
+POST {{c_sharpApi_HostAddress}}/api/users/
+Accept: application/json
+Content-Type: application/json
+
+{
+  "Username": "june_doe",
+  "Email": "june.doe@example.com",
+  "Password": "P@ssw0rd123"
+}
+###
+PUT {{c_sharpApi_HostAddress}}/api/users/{{id}}
+Accept: application/json
+Content-Type: application/json
+
+Body:
+{
+  "name": "John Doe",
+  "email": "john.doe@example.com"
+}

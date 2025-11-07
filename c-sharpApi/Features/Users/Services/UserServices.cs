@@ -20,7 +20,6 @@ namespace c_sharpApi.Features.Users
                 Id = u.Id,
                 Username = u.Username,
                 Email = u.Email,
-                Password = u.PasswordHash // In real scenarios, do not return the password hash
             }).ToList();
         }
         // get user by id
@@ -34,7 +33,6 @@ namespace c_sharpApi.Features.Users
                 Id = user.Id,
                 Username = user.Username,
                 Email = user.Email,
-                Password = user.PasswordHash // In real scenarios, do not return the password hash
             };
         }
         public UserResponseDto CreateUser(CreateUserDto createUserDto)
@@ -48,6 +46,10 @@ namespace c_sharpApi.Features.Users
                 Email = createUserDto.Email,
                 PasswordHash = passwordHash
             };
+            // Assign a new Id since this in-memory store doesn't auto-generate one.
+            // Use the current max Id + 1 (or 1 when list is empty).
+            var nextId = _users.Any() ? _users.Max(u => u.Id) + 1 : 1;
+            user.Id = nextId;
             _users.Add(user);
             // Here you would typically save the user to a database
             // For this example, we'll just return a UserResponseDto
@@ -56,9 +58,7 @@ namespace c_sharpApi.Features.Users
             {
                 Id = user.Id,
                 Username = user.Username,
-                Email = user.Email,
-                Password = createUserDto.Password // In real scenarios, do not return the password
-            };
+                Email = user.Email,};
         }
 
         private string HashPassword(string password)
